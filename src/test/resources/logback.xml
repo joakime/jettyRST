@@ -1,19 +1,35 @@
 <configuration>
-
   <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
-    <resetJUL>true</resetJUL>
+    <resetJUL>true</resetJUL>w
   </contextListener>
 
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
-      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg\n</pattern>
     </encoder>
   </appender>
 
-  <logger name="jndi" level="INFO"/>
-  <logger name="org.eclipse.jetty" level="INFO"/>
+  <!--
+  UNCOMMENT for File based Logging
+  <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+    <file>target/jettyRST.log</file>
 
+    <encoder>
+      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} [%file:%line] - %msg\n</pattern>
+    </encoder>
+  </appender>
+
+  <logger name="arrays_reverser" level="info" additivity="false">
+    <appender-ref ref="STDOUT" />
+  </logger>
   <root level="debug">
+    <appender-ref ref="FILE" />
+  </root> -->
+
+  <!--
+  UNCOMMENT for simple info only console logging -->
+
+  <root level="info">
     <appender-ref ref="STDOUT" />
   </root>
 </configuration>

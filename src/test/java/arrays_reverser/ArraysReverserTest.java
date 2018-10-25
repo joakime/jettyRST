@@ -1,21 +1,22 @@
 package arrays_reverser;
 
+import java.net.URI;
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
+
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.handler.DefaultHandler;
-import org.eclipse.jetty.server.handler.HandlerList;
-import org.eclipse.jetty.webapp.Configuration;
-import org.eclipse.jetty.webapp.WebAppContext;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.RequestEntityProcessing;
-import org.junit.*;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-
-import javax.ws.rs.client.*;
-
-import java.net.URI;
 
 public class ArraysReverserTest
 {
@@ -25,28 +26,7 @@ public class ArraysReverserTest
     @BeforeClass
     public static void startServer() throws Exception
     {
-        server = new Server(0); // use OS selected port for server
-
-        // Enable Annotation Scanning
-        Configuration.ClassList classlist = Configuration.ClassList
-                .setServerDefault(server);
-
-        classlist.addBefore(
-                "org.eclipse.jetty.webapp.JettyWebXmlConfiguration",
-                "org.eclipse.jetty.annotations.AnnotationConfiguration");
-
-        // Setup WAR/WebApp context
-        WebAppContext context = new WebAppContext();
-        context.setContextPath("/reverse-arrays");
-        context.setResourceBase("target/classes");
-
-        // Add WAR/WebApp context to server handler list
-        HandlerList handlers = new HandlerList();
-        handlers.addHandler(context);
-        handlers.addHandler(new DefaultHandler());
-
-        server.setHandler(handlers);
-        server.start();
+        server = ArraysReverserServer.startServer(0); // use OS selected port for server
     }
 
     @AfterClass
@@ -61,7 +41,6 @@ public class ArraysReverserTest
 
     volatile boolean stop = false;
     volatile Exception e = null;
-
 
     @Test
     public void multiThreaded() throws Exception
@@ -117,7 +96,7 @@ public class ArraysReverserTest
 
         while (!stop)
         {
-            URI serverEndpoint = server.getURI().resolve("/reverse-arrays/");
+            URI serverEndpoint = server.getURI().resolve("/reverse-arrays");
             WebTarget webTarget = client.target(serverEndpoint);
             Invocation.Builder builder = webTarget.request();
 

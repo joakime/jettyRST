@@ -10,9 +10,6 @@ public class ArraysReverserEndpoints {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public List<List<Integer>> reverseArrays(List<List<Integer>> sequences) throws InterruptedException {
-    try {
-      Thread.sleep(2);
-    } catch (Exception e) {}
     return ArraysReverser.reverse(sequences);
   }
 }
