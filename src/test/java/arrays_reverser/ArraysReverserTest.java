@@ -9,20 +9,17 @@ import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.RequestEntityProcessing;
 import org.junit.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import static org.junit.Assert.*;
 
 import javax.ws.rs.client.*;
 
 import java.net.URI;
-import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import javax.ws.rs.core.GenericType;
 
 public class ArraysReverserTest
 {
+    private final static Logger LOG = LoggerFactory.getLogger(ArraysReverserTest.class);
     private static Server server;
 
     @BeforeClass
@@ -69,7 +66,7 @@ public class ArraysReverserTest
     @Test
     public void multiThreaded() throws Exception
     {
-        System.out.println("Tests will finish after 2 minutes or when first error occur");
+        LOG.info("Tests will finish after 2 minutes or when first error occur");
         Runnable worker = () -> {
             try
             {
@@ -77,7 +74,7 @@ public class ArraysReverserTest
             }
             catch (Exception ex)
             {
-                ex.printStackTrace();
+                LOG.warn("Unable to execute simpleSingle", ex);
                 e = ex;
                 stop = true;
             }
@@ -93,7 +90,11 @@ public class ArraysReverserTest
         {
             Thread.sleep(1000);
             if (e != null) throw e;
-            if (System.currentTimeMillis() - startTime > 1000 * 60 * 2) break;
+            if (System.currentTimeMillis() - startTime > 1000 * 60 * 2)
+            {
+                LOG.info("Tests finish: 2 minutes is up");
+                stop = true;
+            }
         }
     }
 
