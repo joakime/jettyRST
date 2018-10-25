@@ -1,3 +1,5 @@
+package exceptions;
+
 import com.fasterxml.jackson.databind.JsonMappingException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
