@@ -20,25 +20,31 @@ public class ArraysReverserIT {
   String s3 = "[[0,1,2],[],[9],[5,2],[0,1,2],[],[9],[5,2],[0,1,2],[],[9],[5,2],[0,1,2],[],[9]]";
 
   volatile boolean stop = false;
+  volatile Exception e = null;
 
 
   @Test
-  public void multiThreded() throws InterruptedException {
-    ExecutorService executor = Executors.newFixedThreadPool(5);
+  public void multiThreaded() throws Exception {
+    System.out.println("Tests will finish after 2 minutes or when first error occur");
     Runnable worker = () -> {
       try {
         simpleSingle();
-      } catch (Exception e) {
-        e.printStackTrace();
+      } catch (Exception ex) {
+        ex.printStackTrace();
+        e = ex;
         stop = true;
-        throw e;
       }
     };
     for (int i = 0; i < 5; i++) {
-      new Thread(worker).start();
+      Thread t = new Thread(worker);
+      t.setDaemon(true);
+      t.start();
     }
+    Long startTime = System.currentTimeMillis();
     while (!stop) {
       Thread.sleep(1000);
+      if(e != null) throw e;
+      if(System.currentTimeMillis() - startTime > 1000 * 60 * 2) break;
     }
   }
 
@@ -48,8 +54,6 @@ public class ArraysReverserIT {
 
     int readTimeoutMS = 5 * 60 * 1000;
     int connectTimeoutMS = 60 * 1000;
-    int defaultMaxPerRoute = 100;
-    int maxTotalConnections = 1000;
 
     // set up some HTTP client timeouts
     clientConfig.property(ClientProperties.CONNECT_TIMEOUT, connectTimeoutMS);
@@ -60,7 +64,7 @@ public class ArraysReverserIT {
 
     Client client = ClientBuilder.newClient(clientConfig);
 
-    while (true) {
+    while (!stop) {
       WebTarget webTarget = client.target(ENDPOINT);
       Invocation.Builder builder = webTarget.request();
 

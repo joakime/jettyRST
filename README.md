@@ -5,7 +5,9 @@ Test based on  [blog post](https://medium.com/@tejohnso/a-minimal-java-api-with-
 
 # To reproduce the issue Reset Connection:
 
-./gradlew integration
+./gradlew clean && ./gradlew integration 
+
+in build.gradle file you can change the version of Jetty by (un)commenting `servletContainer` and `jetty93Version` 
 
 
 ## Test Sample App
