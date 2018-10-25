@@ -10,7 +10,8 @@
   </appender>
 
   <!--
-  UNCOMMENT for File based Logging
+  UNCOMMENT below for File based Logging
+
   <appender name="FILE" class="ch.qos.logback.core.FileAppender">
     <file>target/jettyRST.log</file>
 
@@ -21,15 +22,18 @@
 
   <logger name="arrays_reverser" level="info" additivity="false">
     <appender-ref ref="STDOUT" />
+    <appender-ref ref="FILE" />
   </logger>
   <root level="debug">
     <appender-ref ref="FILE" />
-  </root> -->
+  </root>
+   -->
 
   <!--
-  UNCOMMENT for simple info only console logging -->
+  UNCOMMENT below for simple info only console logging -->
 
   <root level="info">
     <appender-ref ref="STDOUT" />
   </root>
+
 </configuration>
