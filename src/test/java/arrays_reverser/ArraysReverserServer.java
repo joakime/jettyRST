@@ -15,6 +15,7 @@ public class ArraysReverserServer
 {
     static
     {
+        SLF4JBridgeHandler.removeHandlersForRootLogger();
         SLF4JBridgeHandler.install();
         java.util.logging.Logger.getLogger("").setLevel(Level.FINEST); // Root logger, for example.
     }
@@ -61,6 +62,7 @@ public class ArraysReverserServer
         server.setHandler(handlers);
         // server.setDumpAfterStart(true);
         server.start();
+        LOG.info("Server is at " + server.getURI());
         return server;
     }
 }
